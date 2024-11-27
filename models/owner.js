@@ -4,9 +4,8 @@ const ownerSchema = mongoose.Schema({
     fullname: String,
     email: String,
     password: String,
-    
     products: [],
-    contact: Number,
+    gstin : String,
     picture: String
 });
 
