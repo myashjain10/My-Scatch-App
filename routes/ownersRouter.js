@@ -12,8 +12,8 @@ const ownerModel = require("../models/owner");
 
    //if user exists already, send error
    const owner = await ownerModel.find();
-
-   if(owner.length > 0) return res.status(503).send("Cant create owner");
+// only one owner should exist
+   if(owner.length > 0) return res.status(503).send("You are not allowed to create owner");
 
    let newOwner = await ownerModel.create({
       fullname,
