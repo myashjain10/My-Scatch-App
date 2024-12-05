@@ -9,7 +9,8 @@ module.exports.registerUser = async (req, res) => {
         //check if user already exists
         let existedUser = await userModel.findOne({email: email});
         if(existedUser){
-            return res.send("Email Already registered");
+            req.flash("error", "Email already registered!")
+            return res.redirect("/");
         }
 
         bcrypt.genSalt(10,(err,salt)=>{
@@ -24,7 +25,7 @@ module.exports.registerUser = async (req, res) => {
 
                 let token = generateToken(user);
                 res.cookie("token", token);
-                res.send("User Created And Logged In");
+                res.redirect("/shop");
 
             });
         });
@@ -41,24 +42,26 @@ module.exports.loginUser = async (req, res) => {
     //checking whether user exists in the db
     let user = await userModel.findOne({email: email});
     if(!user){
-        return res.send("Email or Password Incorrect");
+        req.flash("error","Email or password incorrect")
+        return res.redirect("/");
     }
     //if user exists check password
     bcrypt.compare(password, user.password, (err, result)=> {
+        //if password is correct then generate jwt
         if(result){
             let token = generateToken(user);
             res.cookie("token", token);
-            res.send("Correc email and passowrd : Logged In");
+            res.redirect("/shop");
 
         }else{
-            return res.send("Email or password incorrect");
+            req.flash("error","Email or password incorrect")
+            return res.redirect("/"); 
         }
     });
+}
 
-    //if password is correct then generate jwt
-    let token = generateToken(user);
-    res.cookie("token", token);
-    res.send("Correc email and passowrd : Logged In");
-
-
+module.exports.logoutUser = async (req, res)=>{
+    //set cookies token to blank
+    res.cookies("token","");
+    res.redirect("/");
 }

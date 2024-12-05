@@ -7,7 +7,7 @@ module.exports.isLoggedIn = async (req, res, next)=>{
     if(!req.cookies.token){
         //setting flash message
         req.flash("error", "you need to login first");
-        return res.send("no token, please log in");
+        return res.redirect("/");
     }
 
     try{
@@ -25,6 +25,6 @@ module.exports.isLoggedIn = async (req, res, next)=>{
     }catch(err){
         //any error in try block means token was invalid
         req.flash("error", "Something went wrong");
-        res.send("token invalid");
+        res.redirect("/");
     }
 }
