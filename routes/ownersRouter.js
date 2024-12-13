@@ -2,11 +2,11 @@ const express = require('express');
 const router = express.Router();
 const ownerModel = require("../models/owner");
 
- router.get("/", (req, res)=>{
+router.get("/", (req, res)=>{
     res.send("From owner router");
- });
+});
 
- router.post("/create", async (req,res) => {
+router.post("/create", async (req,res) => {
    // fullname
    const {fullname, email, password} = req.body;
 
@@ -23,6 +23,11 @@ const ownerModel = require("../models/owner");
 
    res.status(200).send(newOwner);
 
- })
+})
 
- module.exports = router;
+router.get("/admin", (req, res) =>{
+   let success = req.flash("success");
+   res.render("createproducts",{ success });
+})
+
+module.exports = router;
